@@ -1,16 +1,21 @@
+import { useContext } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const Navbar = () => {
 
+    const {logOut} = useContext(AuthContext)
+
     const userLinks = <>
-        <li>Home</li>
-        <li>Balance Inquiry</li>
-        <li>Transactions History</li>
+        <Link to="/"><li>Home</li></Link>
+        <Link to="/history"><li>Transactions History</li></Link>
+        <button onClick={()=>logOut()}>Sign Out</button>
     </>
 
     return (
-        <div className="flex justify-center fixed z-10 w-full bg-black bg-opacity-10">
-            <div className="flex justify-around md:justify-between py-[3vh] container text-slate-100">
+        <div className="flex justify-center w-full bg-teal-400 mb-[3vw]">
+            <div className="flex justify-around md:justify-between py-[3vh] container text-black">
                 <h1 className="text-xl font-semibold">Cash N Pay</h1>
                 <div className="dropdown dropdown-end md:hidden">
                     <div tabIndex={0} role="button" className="m-1"><GiHamburgerMenu /></div>

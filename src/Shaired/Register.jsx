@@ -5,18 +5,26 @@ import Swal from "sweetalert2";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../Context/AuthContext";
+import bcrypt from 'bcryptjs';
 
 
 const Register = () => {
-
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate()
     const axiosPublic = useAxiosPublic()
-
     const [passwordEye, setPasswordEye] = useState(false)
     const showPassword = () => {
         setPasswordEye(!passwordEye)
     }
+
+
+    const hashedPin = async (pin) => {
+        const random = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(pin, random)
+        console.log(hash);
+        return hash
+    }
+
 
     const {
         register,
@@ -26,22 +34,25 @@ const Register = () => {
     } = useForm({
         mode: 'onTouched'
     });
-    const onSubmit = data => {
+    const onSubmit = async (data) => {
         const { name } = data;
         const { email } = data;
         const { password } = data;
+        const pin = await hashedPin(password)
+
+
         reset()
 
-        createUser(email, password, name)
+        await createUser(email, password+0, name)
             .then(result => {
                 const user = result.user;
                 console.log(user);
-                updateUserProfile(name, password)
+                updateUserProfile(name, password+0)
                     .then(() => {
                         const userInfo = {
                             name: name,
                             email: email,
-                            password: password
+                            password: pin
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
@@ -85,7 +96,7 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Name</label>
-                    
+
                     <input
                         type="text"
                         className={`${inputStyle}`}
@@ -94,7 +105,7 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Email</label>
-                    
+
                     <input
                         type="text"
                         className={`${inputStyle}`}
@@ -103,10 +114,10 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Password</label>
-                    
+
                     <div className="relative">
                         <input
-                            type={passwordEye ? "password" : ""}
+                            type={(!passwordEye) ? 'password' : 'text'}
                             placeholder="Password"
                             maxLength="5"
                             minLength="5"

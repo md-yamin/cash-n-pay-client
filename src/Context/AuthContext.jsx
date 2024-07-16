@@ -40,10 +40,10 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     }
 
-    const updateUserProfile = (name, photo) => {
+    const updateUserProfile = (name, userPin) => {
         return updateProfile(auth.currentUser, {
             displayName: name,
-            photoURL: photo
+            userPin: userPin
         })
     }
 
@@ -58,11 +58,11 @@ const AuthProvider = ({ children }) => {
                             localStorage.setItem('access-token', res.data.token)
                         }
                     })
-
             }
             else {
                 localStorage.removeItem('access-token')
             }
+            setLoading(false)
             setLoading(false)
 
         }
