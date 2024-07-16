@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import { useForm } from "react-hook-form";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
-const SendMoney = () => {
+const CashIn = () => {
     const { id } = useParams()
     const [, userData] = useUserData(id)
     const [passwordEye, setPasswordEye] = useState(false)
@@ -49,14 +49,14 @@ const SendMoney = () => {
 
     return (
         <div className="space-y-[2vw]">
-            <h1 className="text-3xl text-center">Send Money</h1>
+            <h1 className="text-3xl text-center">You will need to use Stripe For this</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center mx-auto space-y-[3vw]"action="">
                 <div className="w-1/2 space-y-4">
-                    <label className="text-xl" htmlFor="">To</label>
+                    <label className="text-xl" htmlFor="">Agent&apos;s Number</label>
                     <input
-                        name="receiverAccount"
+                        name="agentNumber"
                         type="text"
-                        placeholder="Receiver's Number"
+                        placeholder="Agent's Number"
                         className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
 
                 </div>
@@ -94,9 +94,9 @@ const SendMoney = () => {
                     </div>
                 </div>
                 <div className="w-1/2 space-y-4">
-                    <label className="text-xl" htmlFor="">Amount To Be Sent</label>
+                    <label className="text-xl" htmlFor="">Amount To Be Cashed Out</label>
                     <input
-                        name="pin"
+                        name="amount"
                         type="number"
                         placeholder="Amount"
                         className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
@@ -114,4 +114,4 @@ const SendMoney = () => {
     );
 };
 
-export default SendMoney;
+export default CashIn;

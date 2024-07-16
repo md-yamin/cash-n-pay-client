@@ -37,6 +37,7 @@ const Register = () => {
     const onSubmit = async (data) => {
         const { name } = data;
         const { email } = data;
+        const { number } = data;
         const { password } = data;
         const pin = await hashedPin(password)
 
@@ -52,7 +53,10 @@ const Register = () => {
                         const userInfo = {
                             name: name,
                             email: email,
-                            password: pin
+                            number: number,
+                            password: pin,
+                            balance: 50,
+                            status: "user"
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
@@ -89,7 +93,7 @@ const Register = () => {
         <div className="flex w-full h-full justify-between items-center mx-auto">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="md:space-y-[1vw] mx-auto mt-[10vh] md:mt-[3vw] flex flex-col justify-center space-y-5" action="">
+                className="md:space-y-[1vw] mx-auto mt-[10vh] md:mt-[3vw] flex flex-col justify-center space-y-3" action="">
                 <div>
                     <h2 className="md:text-[3vw] text-xl text-center uppercase">Register</h2>
                     <p className="md:text-[1.2vw] text-center w-1/2 text-xs mt-5 md:mt-10 md:w-full mx-auto">Enter valid information and create an account.</p>
@@ -104,12 +108,21 @@ const Register = () => {
                         {...register("name", { required: true })} />
                 </div>
                 <div>
+                    <label className="text-[1.2vw] hidden md:block" htmlFor="">Number</label>
+
+                    <input
+                        type="text"
+                        className={`${inputStyle}`}
+                        placeholder="Phone Number"
+                        {...register("number", { required: true })} />
+                </div>
+                <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Email</label>
 
                     <input
                         type="text"
                         className={`${inputStyle}`}
-                        placeholder="Email or Phone Number"
+                        placeholder="Email"
                         {...register("email", { required: true })} />
                 </div>
                 <div>
@@ -149,7 +162,7 @@ const Register = () => {
                 <div className="space-y-[1vw]">
                     <p className="md:text-[1vw] text-xs">Already have an account?<Link className="hover:text-red-400 underline" to={'/login'}>Login Now</Link></p>
                 </div>
-                <input className="bg-emerald-700 text-sm py-1 px-5 rounded-md lg:rounded-full md:w-full md:h-[3.5vw] border text-white md:text-[1.2vw]" type="submit" value="Register" />
+                <input className="bg-emerald-700 hover:bg-emerald-500 text-sm py-1 px-5 rounded-md lg:rounded-full md:w-full md:h-[3.5vw] border text-white md:text-[1.2vw]" type="submit" value="Register" />
             </form>
         </div>
     );

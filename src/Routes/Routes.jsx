@@ -7,6 +7,8 @@ import TransactionHistory from "../Pages/TransactionHistory/TransactionHistory";
 import Login from "../Shaired/Login";
 import PrivateRoute from "./PrivateRoute";
 import SendMoney from "../Pages/SendMoney/SendMoney";
+import CashOut from "../Pages/CashOut/CashOut";
+import CashIn from "../Pages/CashIn/CashIn";
 
 
 export const router = createBrowserRouter([
@@ -34,6 +36,14 @@ export const router = createBrowserRouter([
         {
             path: "/sendMoney/:id",
             element: <PrivateRoute><SendMoney></SendMoney></PrivateRoute>,
+        },
+        {
+            path: "/cashOut/:id",
+            element: <PrivateRoute><CashOut></CashOut></PrivateRoute>,
+        },
+        {
+            path: "/cashIn/:id",
+            element: <PrivateRoute><CashIn></CashIn></PrivateRoute>,
         },
       ]
     },

@@ -77,6 +77,15 @@ const Login = () => {
                         type="text"
                         {...register("email", { required: true })} />
                 </div>
+                <div>
+                    <label className="text-[1.2vw]" htmlFor="">Number</label>
+                    <br />
+                    <input
+                        placeholder="Number"
+                        className={`${inputStyle}`}
+                        type="text"
+                        {...register("number", { required: true })} />
+                </div>
                 <div className="relative">
                     <label className="text-[1.2vw]" htmlFor="">Password</label>
                     <input
@@ -112,7 +121,7 @@ const Login = () => {
                 <div className="space-y-[1vw]">
                     <p className="text-[1vw]">Don&apos;t have an account? <Link to={'/register'} className="hover:text-red-400 underline" >Register Now</Link></p>
                 </div>
-                <input className="bg-emerald-700 text-sm py-1 px-5 rounded-md lg:rounded-full md:w-full md:h-[3.5vw] border text-white md:text-[1.2vw]" type="submit" value="Login" />
+                <input className="bg-emerald-700 hover:bg-emerald-500 text-sm py-1 px-5 rounded-md lg:rounded-full md:w-full md:h-[3.5vw] border text-white md:text-[1.2vw]" type="submit" value="Login" />
             </form>
         </div>
     );
