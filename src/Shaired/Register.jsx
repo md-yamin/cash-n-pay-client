@@ -39,16 +39,17 @@ const Register = () => {
         const { email } = data;
         const { number } = data;
         const { password } = data;
+        const { accountType } = data;
         const pin = await hashedPin(password)
-
-
         reset()
 
-        await createUser(email, password+0, name)
+
+
+        await createUser(email, password + 0, name)
             .then(result => {
                 const user = result.user;
                 console.log(user);
-                updateUserProfile(name, password+0)
+                updateUserProfile(name, password + 0)
                     .then(() => {
                         const userInfo = {
                             name: name,
@@ -56,7 +57,8 @@ const Register = () => {
                             number: number,
                             password: pin,
                             balance: 50,
-                            status: "user"
+                            accountType: accountType,
+                            status: 'pending'
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
@@ -87,26 +89,27 @@ const Register = () => {
             )
     }
 
-    const inputStyle = "border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw] mb-[3vw] mb-1"
+    const inputStyle = "border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw] mb-3"
 
     return (
-        <div className="flex w-full h-full justify-between items-center mx-auto">
+        <div className="flex w-full h-full justify-center items-center mx-auto">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="md:space-y-[1vw] mx-auto mt-[10vh] md:mt-[3vw] flex flex-col justify-center space-y-3" action="">
+                className="md:space-y-[1vw] mx-auto mt-[10vh] md:mt-3 flex flex-col justify-center" action="">
                 <div>
                     <h2 className="md:text-[3vw] text-xl text-center uppercase">Register</h2>
-                    <p className="md:text-[1.2vw] text-center w-1/2 text-xs mt-5 md:mt-10 md:w-full mx-auto">Enter valid information and create an account.</p>
+                    <p className="md:text-[1.2vw] text-center w-1/2 text-xs mt-5 md:mt-5 md:w-full mx-auto">Enter valid information and create an account.</p>
                 </div>
+
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Name</label>
-
                     <input
                         type="text"
                         className={`${inputStyle}`}
                         placeholder="Name"
                         {...register("name", { required: true })} />
                 </div>
+
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Number</label>
 
@@ -116,18 +119,18 @@ const Register = () => {
                         placeholder="Phone Number"
                         {...register("number", { required: true })} />
                 </div>
+
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Email</label>
-
                     <input
                         type="text"
                         className={`${inputStyle}`}
                         placeholder="Email"
                         {...register("email", { required: true })} />
                 </div>
+
                 <div>
                     <label className="text-[1.2vw] hidden md:block" htmlFor="">Password</label>
-
                     <div className="relative">
                         <input
                             type={(!passwordEye) ? 'password' : 'text'}
@@ -157,6 +160,16 @@ const Register = () => {
                             }
                         </div>
                     </div>
+                </div>
+
+                <div>
+                    <label className="text-[1.2vw] hidden md:block mb-2" htmlFor="">Account Type</label>
+                    <select className="select select-accent w-full max-w-xs"
+                        {...register("accountType", { required: true })}>
+                        <option defaultValue={"user"} value={"user"}>User</option>
+                        <option value={"agent"}>Agent</option>
+                        <option value={"admin"}>Admin</option>
+                    </select>
                 </div>
 
                 <div className="space-y-[1vw]">
