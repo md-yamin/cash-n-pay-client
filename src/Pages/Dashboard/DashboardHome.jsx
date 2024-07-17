@@ -40,16 +40,27 @@ const DashboardHome = () => {
                         <button className="bg-teal-500 py-5 rounded-lg text-xl w-[15vw] hover:bg-teal-300">Cash In</button>
                     </Link>
                     {
-                        userData?.status !== 'approved' && userData?.accountType !== 'agent' ?
-                            <Link className="col-span-3" to={`/transactionManagement/${user?.email}`}>
-                                <button className="bg-teal-500 px-10 py-5 rounded-lg text-xl hover:bg-teal-300">Transaction Management</button>
-                            </Link>
+                        userData?.status !== 'approved' ?
+
+                            (
+                                userData?.accountType === 'agent' ?
+
+                                (< Link className="col-span-3" to={`/transactionManagement/${user?.email}`}>
+                                    <button className="bg-teal-500 px-10 py-5 rounded-lg text-xl hover:bg-teal-300">Transaction Management</button>
+                                </Link>)
+                                :
+                                (<Link className="col-span-3" to={`/users`}>
+                                    <button className="bg-teal-500 px-10 py-5 rounded-lg text-xl hover:bg-teal-300">User Management</button>
+                                </Link>)
+                            )
                             :
-                            <></>
+                            (<></>)
+
                     }
+
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

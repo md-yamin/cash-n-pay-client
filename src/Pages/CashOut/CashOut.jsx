@@ -5,15 +5,17 @@ import { useState } from "react";
 import bcrypt from 'bcryptjs';
 import { useForm } from "react-hook-form";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const CashOut = () => {
     const { id } = useParams()
     const [, userData] = useUserData(id)
     const [passwordEye, setPasswordEye] = useState(false)
+    const axiosSecure = useAxiosSecure()
     const showPassword = () => {
         setPasswordEye(!passwordEye)
     }
-
+    const now = new Date()
 
     const {
         register,
@@ -25,9 +27,23 @@ const CashOut = () => {
     });
     const onSubmit = async (data) => {
         const { password } = data;
+        const { amount } = data;
+        const { agentNumber } = data;
         const verified = await bcrypt.compare(password, userData.password)
+
+        const transactionInfo= {
+            user: userData?._id,
+            date: now.toLocaleDateString(),
+            time: now.toLocaleTimeString(),
+            amount:amount,
+            agentNumber:agentNumber,
+            type:"cashOut",
+            request: 'pending'
+        }
+        console.log(transactionInfo);
         reset()
         if (verified){
+            axiosSecure.post('/history', transactionInfo)
             Swal.fire({
                 title: 'Success',
                 text: 'Amount has been transferred successfully',
@@ -57,7 +73,8 @@ const CashOut = () => {
                         name="agentNumber"
                         type="text"
                         placeholder="Agent's Number"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("agentNumber", { required: true })}/>
 
                 </div>
 
@@ -98,8 +115,11 @@ const CashOut = () => {
                     <input
                         name="amount"
                         type="number"
+                        min={50}
+                        max={userData.balance}
                         placeholder="Amount"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("amount", { required: true })}/>
                 </div>
 
 

@@ -5,11 +5,14 @@ import { useState } from "react";
 import bcrypt from 'bcryptjs';
 import { useForm } from "react-hook-form";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const CashIn = () => {
     const { id } = useParams()
     const [, userData] = useUserData(id)
     const [passwordEye, setPasswordEye] = useState(false)
+    const axiosSecure = useAxiosSecure()
+    const now = new Date()
     const showPassword = () => {
         setPasswordEye(!passwordEye)
     }
@@ -25,9 +28,23 @@ const CashIn = () => {
     });
     const onSubmit = async (data) => {
         const { password } = data;
+        const { amount } = data;
+        const { agentNumber } = data;
         const verified = await bcrypt.compare(password, userData.password)
         reset()
+        const transactionInfo= {
+            user: userData?._id,
+            date: now.toLocaleDateString(),
+            time: now.toLocaleTimeString(),
+            amount:amount,
+            agentNumber:agentNumber,
+            type:"cashOut",
+            request: 'pending'
+        }
+        console.log(transactionInfo);
+        reset()
         if (verified){
+            axiosSecure.post('/history', transactionInfo)
             Swal.fire({
                 title: 'Success',
                 text: 'Amount has been transferred successfully',
@@ -49,7 +66,7 @@ const CashIn = () => {
 
     return (
         <div className="space-y-[2vw]">
-            <h1 className="text-3xl text-center">You will need to use Stripe For this</h1>
+            <h1 className="text-3xl text-center">Cash In</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center mx-auto space-y-[3vw]"action="">
                 <div className="w-1/2 space-y-4">
                     <label className="text-xl" htmlFor="">Agent&apos;s Number</label>
@@ -57,7 +74,8 @@ const CashIn = () => {
                         name="agentNumber"
                         type="text"
                         placeholder="Agent's Number"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("agentNumber", { required: true })}/>
 
                 </div>
 
@@ -94,12 +112,13 @@ const CashIn = () => {
                     </div>
                 </div>
                 <div className="w-1/2 space-y-4">
-                    <label className="text-xl" htmlFor="">Amount To Be Cashed Out</label>
+                    <label className="text-xl" htmlFor="">Amount To Be Cashed In</label>
                     <input
                         name="amount"
                         type="number"
                         placeholder="Amount"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("amount", { required: true })}/>
                 </div>
 
 

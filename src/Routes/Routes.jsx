@@ -10,6 +10,7 @@ import SendMoney from "../Pages/SendMoney/SendMoney";
 import CashOut from "../Pages/CashOut/CashOut";
 import CashIn from "../Pages/CashIn/CashIn";
 import TransactionManagement from "../Pages/TransactionManagement/TransactionManagement";
+import UserManagement from "../Pages/UserManagement/UserManagement";
 
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
         {
             path: "/history",
             element: <PrivateRoute><TransactionHistory></TransactionHistory></PrivateRoute>,
+        },
+        {
+            path: "/users",
+            element: <PrivateRoute><UserManagement></UserManagement></PrivateRoute>,
         },
         {
             path: "/sendMoney/:id",

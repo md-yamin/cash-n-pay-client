@@ -21,7 +21,6 @@ const Register = () => {
     const hashedPin = async (pin) => {
         const random = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(pin, random)
-        console.log(hash);
         return hash
     }
 
