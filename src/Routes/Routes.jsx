@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
             element: <PrivateRoute><CashIn></CashIn></PrivateRoute>,
         },
         {
-            path: "/transactionManagement/:id",
+            path: "/transactionManagement",
             element: <PrivateRoute><TransactionManagement></TransactionManagement></PrivateRoute>,
         },
       ]

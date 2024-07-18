@@ -1,15 +1,16 @@
-import { useParams } from "react-router-dom";
 import useUserData from "../../Hooks/useUserData";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import bcrypt from 'bcryptjs';
 import { useForm } from "react-hook-form";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const SendMoney = () => {
-    const { id } = useParams()
-    const [, userData] = useUserData(id)
+    const [, userData] = useUserData()
     const [passwordEye, setPasswordEye] = useState(false)
+    const axiosSecure = useAxiosSecure()
+    const now = new Date()
     const showPassword = () => {
         setPasswordEye(!passwordEye)
     }
@@ -25,9 +26,24 @@ const SendMoney = () => {
     });
     const onSubmit = async (data) => {
         const { password } = data;
+        const { amount } = data;
+        const { to } = data;
         const verified = await bcrypt.compare(password, userData.password)
+        const transactionInfo= {
+            user: userData?._id,
+            date: now.toLocaleDateString(),
+            time: now.toLocaleTimeString(),
+            amount:amount,
+            agentNumber:"",
+            to: to,
+            from:userData.number,
+            type:"sendMoney",
+            request: 'approved'
+        }
+        console.log(transactionInfo);
         reset()
         if (verified){
+            axiosSecure.post('/history', transactionInfo)
             Swal.fire({
                 title: 'Success',
                 text: 'Amount has been transferred successfully',
@@ -57,7 +73,8 @@ const SendMoney = () => {
                         name="receiverAccount"
                         type="text"
                         placeholder="Receiver's Number"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("to", { required: true })}/>
 
                 </div>
 
@@ -99,7 +116,10 @@ const SendMoney = () => {
                         name="pin"
                         type="number"
                         placeholder="Amount"
-                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" />
+                        min={50}
+                        max={userData.balance}
+                        className="border text-xs pl-3 text-[3vw] w-full h-[7vw] md:h-[3vw]" 
+                        {...register("amount", { required: true })}/>
                 </div>
 
 

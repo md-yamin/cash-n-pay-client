@@ -5,10 +5,10 @@ import useUserData from "../../Hooks/useUserData";
 
 
 const DashboardHome = () => {
-
     const { user } = useContext(AuthContext)
     const boxStyle = "w-full px-[20vw] py-[2vw] hover:bg-emerald-500 bg-blue-200 border-blue-600 hover:text-red-400"
-    const [, userData] = useUserData(user?.email)
+    const [, userData] = useUserData()
+
     return (
         <div>
             <div className="flex items-center justify-center">
@@ -45,7 +45,7 @@ const DashboardHome = () => {
                             (
                                 userData?.accountType === 'agent' ?
 
-                                (< Link className="col-span-3" to={`/transactionManagement/${user?.email}`}>
+                                (< Link className="col-span-3" to={`/transactionManagement`}>
                                     <button className="bg-teal-500 px-10 py-5 rounded-lg text-xl hover:bg-teal-300">Transaction Management</button>
                                 </Link>)
                                 :

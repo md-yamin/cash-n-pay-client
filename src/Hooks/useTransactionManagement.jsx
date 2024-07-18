@@ -2,22 +2,20 @@ import useAxiosSecure from './useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import useUserData from './useUserData';
 
-const useTransactionHistory = () => {
+const useTransactionManagement = () => {
     const axiosSecure = useAxiosSecure()
     const [, userData] = useUserData()
-    console.log(userData);
     const id = userData?.number
-    console.log(id);
 
 
-    const { refetch, data: history, isLoading } = useQuery({
-        queryKey: ['history', id],
+    const { refetch, data: transactions, isLoading } = useQuery({
+        queryKey: ['transactions', id],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/history/${id}`)
+            const res = await axiosSecure.get(`/transactionsManagement/${id}`)
             return res.data
         }
     })
-    return [refetch, history, isLoading]
+    return [refetch, transactions, isLoading]
 };
 
-export default useTransactionHistory;
+export default useTransactionManagement;

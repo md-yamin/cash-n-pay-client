@@ -5,10 +5,10 @@ import useUserData from "../Hooks/useUserData";
 
 
 const AdminRoute = ({children}) => {
-    const {user, loading} = useContext(AuthContext)
+    const {loading} = useContext(AuthContext)
     const location = useLocation()
     const adminRoute = location.pathname.includes('users')
-    const [,userData] = useUserData(user?.email)
+    const [,userData] = useUserData()
 
     if (adminRoute) {
         if (userData?.status !== 'approved' && userData?.accountType === 'admin') {

@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import useUserData from "../../Hooks/useUserData";
 import Swal from "sweetalert2";
 import { useState } from "react";
@@ -8,8 +7,8 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const CashIn = () => {
-    const { id } = useParams()
-    const [, userData] = useUserData(id)
+
+    const [, userData] = useUserData()
     const [passwordEye, setPasswordEye] = useState(false)
     const axiosSecure = useAxiosSecure()
     const now = new Date()
@@ -38,10 +37,12 @@ const CashIn = () => {
             time: now.toLocaleTimeString(),
             amount:amount,
             agentNumber:agentNumber,
-            type:"cashOut",
+            to:userData.number,
+            from: agentNumber,
+            type:"cashIn",
             request: 'pending'
         }
-        console.log(transactionInfo);
+
         reset()
         if (verified){
             axiosSecure.post('/history', transactionInfo)
